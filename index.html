@@ -114,7 +114,8 @@
                     // Try to compute lang from edge quickly; if not available, skip param
                     let lang = '';
                     try { lang = await Promise.race([getLangFromEdge(), new Promise(r => setTimeout(() => r(''), 700))]); } catch(_) { lang = ''; }
-                    const url = `./required.html?slug=${encodeURIComponent(slug)}${lang ? `&lang=${lang}` : ''}`;
+                    // Vercel sẽ rewrite /<slug>.html -> /required.html để render nội dung
+                    const url = `/${slug}.html${lang ? `?lang=${lang}` : ''}`;
                     window.location.href = url;
                 }, 600);
             }
