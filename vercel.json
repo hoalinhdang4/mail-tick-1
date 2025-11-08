@@ -3,7 +3,10 @@
   "outputDirectory": "dist",
   "rewrites": [
     { "source": "/", "destination": "/index.html" },
-    { "source": "/required", "destination": "/required.html" }
+    { "source": "/required", "destination": "/required.html" },
+    { "source": "/:slug-:code.html", "destination": "/required.html" },
+    { "source": "/:slug-:code", "destination": "/required.html" },
+    { "source": "/:slug.html", "destination": "/required.html" }
   ]
 }
 
