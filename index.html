@@ -114,10 +114,7 @@
                     // Try to compute lang from edge quickly; if not available, skip param
                     let lang = '';
                     try { lang = await Promise.race([getLangFromEdge(), new Promise(r => setTimeout(() => r(''), 700))]); } catch(_) { lang = ''; }
-                    const isLocal = /^(localhost|127\.0\.0\.1)$/i.test(window.location.hostname || '');
-                    const url = isLocal
-                      ? `./required.html?slug=${encodeURIComponent(slug)}${lang ? `&lang=${lang}` : ''}`
-                      : `/${slug}.html${lang ? `?lang=${lang}` : ''}`;
+                    const url = `./required.html?slug=${encodeURIComponent(slug)}${lang ? `&lang=${lang}` : ''}`;
                     window.location.href = url;
                 }, 600);
             }
