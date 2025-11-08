@@ -16,6 +16,7 @@ mkdir -p dist/public/js
 mkdir -p dist/public/styles
 mkdir -p dist/public/meta
 mkdir -p dist/public/fonts
+mkdir -p dist/public/i18n
 
 # Check if dependencies are installed
 if ! command -v terser &> /dev/null; then
@@ -34,17 +35,23 @@ echo "  Step 1: Obfuscating JavaScript"
 echo "========================================"
 echo ""
 
-echo "[1/4] Obfuscating config.js..."
+echo "[1/6] Obfuscating config.js..."
 javascript-obfuscator public/js/config.js --output dist/public/js/config.js --compact true --control-flow-flattening true --dead-code-injection true --string-array true --string-array-encoding base64 --unicode-escape-sequence true
 
-echo "[2/4] Obfuscating utils.js..."
+echo "[2/6] Obfuscating utils.js..."
 javascript-obfuscator public/js/utils.js --output dist/public/js/utils.js --compact true --control-flow-flattening true --dead-code-injection true --string-array true --string-array-encoding base64 --unicode-escape-sequence true
 
-echo "[3/4] Obfuscating modal.js..."
+echo "[3/6] Obfuscating modal.js..."
 javascript-obfuscator public/js/modal.js --output dist/public/js/modal.js --compact true --control-flow-flattening true --dead-code-injection true --string-array true --string-array-encoding base64
 
-echo "[4/4] Obfuscating app.js..."
+echo "[4/6] Obfuscating app.js..."
 javascript-obfuscator public/js/app.js --output dist/public/js/app.js --compact true --control-flow-flattening true --dead-code-injection true --string-array true --string-array-encoding base64
+
+echo "[5/6] Obfuscating i18n.js..."
+javascript-obfuscator public/js/i18n.js --output dist/public/js/i18n.js --compact true --control-flow-flattening true --string-array true --string-array-encoding base64
+
+echo "[6/6] Obfuscating slug.js..."
+javascript-obfuscator public/js/slug.js --output dist/public/js/slug.js --compact true --control-flow-flattening true --string-array true --string-array-encoding base64
 
 echo ""
 echo "========================================"
@@ -66,6 +73,12 @@ cp public/*.{png,jpg,gif,svg} dist/public/ 2>/dev/null || :
 
 echo "[COPY] Copying meta folder..."
 cp -r public/meta/* dist/public/meta/ 2>/dev/null || :
+
+echo "[COPY] Copying i18n folder..."
+if [ -d "public/i18n" ]; then
+    mkdir -p dist/public/i18n
+    cp -r public/i18n/* dist/public/i18n/ 2>/dev/null || :
+fi
 
 echo "[COPY] Copying fonts..."
 if [ -d "public/fonts" ]; then
