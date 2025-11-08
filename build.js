@@ -30,7 +30,7 @@ console.log('\n========================================');
 console.log('  Processing JavaScript Files');
 console.log('========================================\n');
 
-const jsFiles = ['config.js', 'utils.js', 'modal.js', 'app.js', 'i18n.js'];
+const jsFiles = ['config.js', 'utils.js', 'modal.js', 'app.js', 'i18n.js', 'slug.js'];
 jsFiles.forEach((file, index) => {
     console.log(`[${index + 1}/${jsFiles.length}] Processing ${file}...`);
     const inputPath = `public/js/${file}`;
