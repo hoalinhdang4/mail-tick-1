@@ -1,6 +1,10 @@
 {
   "rewrites": [
     {
+      "source": "/api/ip-country",
+      "destination": "https://ipapi.co/json/"
+    },
+    {
       "source": "/",
       "destination": "/index.html"
     },
